@@ -58,3 +58,24 @@ class TestParentNode(unittest.TestCase):
 
         expected = "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>"
         self.assertEqual(node.to_html(), expected)
+
+
+    def test_to_html_nest_parent(self):
+        node = ParentNode(
+            "p",
+            [
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                ParentNode(
+                    "p",
+                    [
+                        LeafNode("a", "vagyunk", {"href": "vegig.com"})
+                    ]
+                ),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
+
+        expected = '<p><b>Bold text</b>Normal text<p><a href="vegig.com">vagyunk</a></p><i>italic text</i>Normal text</p>'
+        self.assertEqual(node.to_html(), expected)
